@@ -13,5 +13,6 @@ namespace CodingExercise.DAL
         int UpdateRole(Role role);
         int DeleteRole(Role role);
         IEnumerable<Role> GetRoles();
+        IEnumerable<Role> GetRolesById(int roleId);
     }
 }

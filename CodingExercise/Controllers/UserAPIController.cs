@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using CodingExercise.DAL;
+using CodingExercise.Models;
 
 namespace CodingExercise.Controllers
 {
@@ -28,7 +29,28 @@ namespace CodingExercise.Controllers
         // GET api/<controller>
         public IHttpActionResult Get()
         {
-            var userList = _userStore.GetUsers();
+            List<UserVM> userList = new List<UserVM>();
+
+            var users = _userStore.GetUsers();
+
+            foreach (var user in users)
+            {
+                var userRoleId = _userRoleStore.GetUserRoles(user).FirstOrDefault().RoleId;
+                var roleName = _roleStore.GetRolesById(userRoleId).FirstOrDefault().Name;
+
+                userList.Add(new UserVM
+                {
+                    Id = user.Id,
+                    RoleId = 0,
+                    LastName = user.LastName,
+                    FirstName = user.FirstName,
+                    RoleName = roleName,
+                    Email = user.Email,
+                    Phone = user.Phone,
+                    Username = user.Username
+                }); ;
+            }
+
             return Ok(userList);
         }
 

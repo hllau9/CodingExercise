@@ -5,21 +5,6 @@ namespace CodingExercise.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IUserStore _userStore;
-        private readonly IRoleStore _roleStore;
-        private readonly IUserRoleStore _userRoleStore;
-
-        public HomeController()
-        {
-        }
-
-        public HomeController(IUserStore userStore, IRoleStore roleStore, IUserRoleStore userRoleStore)
-        {
-            _userStore = userStore;
-            _roleStore = roleStore;
-            _userRoleStore = userRoleStore;
-        }
-
         public ActionResult Index()
         {
             return View();

@@ -26,12 +26,12 @@ namespace CodingExercise.DAL
         {
             string sql = @"select * from Roles;";
 
-            IEnumerable<Role> appUser = new List<Role>();
+            IEnumerable<Role> roles = new List<Role>();
             using (SqlConnection conn = new SqlConnection(connString))
             {
-                appUser = conn.Query<Role>(sql);
+                roles = conn.Query<Role>(sql);
             }
-            return appUser;
+            return roles;
         }
 
         public int DeleteRole(Role role)
@@ -57,6 +57,18 @@ namespace CodingExercise.DAL
                 affectedRow = conn.Execute(sql, role);
             }
             return affectedRow;
+        }
+
+        public IEnumerable<Role> GetRolesById(int roleId)
+        {
+            string sql = @"select * from Roles where Id = @Id;";
+
+            IEnumerable<Role> roles = new List<Role>();
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                roles = conn.Query<Role>(sql, new { Id = roleId });
+            }
+            return roles;
         }
     }
 }
