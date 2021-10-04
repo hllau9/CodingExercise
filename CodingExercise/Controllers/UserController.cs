@@ -59,16 +59,18 @@ namespace CodingExercise.Controllers
         }
 
         // GET: User/Create
-        //public ActionResult Create()
-        //{
-        //    UserData userData = new UserData();
-        //    IEnumerable<UserRole> roleList = userData.GetUserRoles();
+        public ActionResult Create()
+        {
+            //UserData userData = new UserData();
+            //IEnumerable<UserRole> roleList = userData.GetUserRoles();
 
-        //    var user = new UserVM();
-        //    user.RoleNameList = roleList;
+            var roleList = _roleStore.GetRoles(); 
 
-        //    return View(user);
-        //}
+            var user = new UserVM();
+            user.RoleNameList = roleList;
+
+            return View(user);
+        }
 
         //// POST: User/Create
         //[HttpPost]
