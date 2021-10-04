@@ -30,25 +30,27 @@ namespace CodingExercise.Controllers
         public IHttpActionResult Get()
         {
             List<UserVM> userList = new List<UserVM>();
-            
+
             var users = _userStore.GetUsers();
 
             foreach (var user in users)
             {
-                //var userRoles = _userRoleStore.GetUserRoles(user);
+                var userRoleId = _userRoleStore.GetUserRoles(user).FirstOrDefault().RoleId;
+                var roleName = _roleStore.GetRolesById(userRoleId).FirstOrDefault().Name;
+
                 userList.Add(new UserVM
                 {
                     Id = user.Id,
                     RoleId = 0,
                     LastName = user.LastName,
                     FirstName = user.FirstName,
-                    RoleName = "dummy role",
+                    RoleName = roleName,
                     Email = user.Email,
                     Phone = user.Phone,
                     Username = user.Username
-                });
+                }); ;
             }
-            
+
             return Ok(userList);
         }
 
