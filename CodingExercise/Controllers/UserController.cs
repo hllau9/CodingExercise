@@ -49,6 +49,7 @@ namespace CodingExercise.Controllers
                 }); ;
             }
 
+            var pagedUserList = userList.ToPagedList(page ?? 1, 3);
             return View(userList.ToPagedList(page ?? 1, 3));
         }
 
