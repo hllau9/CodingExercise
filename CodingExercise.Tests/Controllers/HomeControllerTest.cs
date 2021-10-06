@@ -1,10 +1,6 @@
-﻿using CodingExercise;
-using CodingExercise.Controllers;
+﻿using CodingExercise.Controllers;
+using CodingExercise.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Web.Mvc;
 
 namespace CodingExercise.Tests.Controllers
