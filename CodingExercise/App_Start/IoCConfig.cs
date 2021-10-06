@@ -9,12 +9,13 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Http;
 using CodingExercise.DAL;
+using CodingExercise.Services;
 
 namespace CodingExercise
 {
     public class IoCConfig
     {
-        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+        //private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
         public static void Configure()
         {
@@ -35,10 +36,8 @@ namespace CodingExercise
             // OPTIONAL: Register the Autofac model binder provider.
             builder.RegisterWebApiModelBinderProvider();
 
-
-            builder.RegisterType<UserStore>().As<IUserStore>();
-            builder.RegisterType<RoleStore>().As<IRoleStore>();
-            builder.RegisterType<UserRoleStore>().As<IUserRoleStore>();
+            builder.RegisterType<UserManager>().As<IUserManager>();
+            builder.RegisterType<UserService>().As<IUserService>();
 
 
             // Set the dependency resolver to be Autofac.
@@ -50,7 +49,7 @@ namespace CodingExercise
             //for web api
             config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
 
-            Logger.Info("test");
+            //Logger.Info("test");
         }
     }
 }

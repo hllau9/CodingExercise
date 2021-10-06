@@ -364,3 +364,6 @@ FodyWeavers.xsd
 
 # log files
 logfilexxxxx.txt
+
+# Temp data folder
+Temp/
