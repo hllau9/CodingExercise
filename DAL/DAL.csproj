@@ -45,17 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="xDataAccess.cs" />
-    <Compile Include="xIDataAccess.cs" />
-    <Compile Include="IRoleStore.cs" />
     <Compile Include="IUserManager.cs" />
-    <Compile Include="IUserRoleStore.cs" />
-    <Compile Include="IUserStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RoleStore.cs" />
     <Compile Include="UserManager.cs" />
-    <Compile Include="UserRoleStore.cs" />
-    <Compile Include="UserStore.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
