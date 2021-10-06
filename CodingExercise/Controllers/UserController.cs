@@ -1,40 +1,39 @@
-﻿using CodingExercise.DAL;
+﻿using CodingExercise.Entities;
 using CodingExercise.Models;
+using CodingExercise.Services;
+using CodingExercise.Helpers;
 using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using System.IO;
 
 namespace CodingExercise.Controllers
 {
     public class UserController : Controller
     {
-        private readonly IUserStore _userStore;
-        private readonly IRoleStore _roleStore;
-        private readonly IUserRoleStore _userRoleStore;
+        private readonly IUserService _userService;
 
         public UserController()
         {
         }
-        public UserController(IUserStore userStore, IRoleStore roleStore, IUserRoleStore userRoleStore)
+        public UserController(IUserService userService)
         {
-            _userStore = userStore;
-            _roleStore = roleStore;
-            _userRoleStore = userRoleStore;
+            _userService = userService;
         }
+
         // GET: User
         public ActionResult Index(int? page)
         {
             List<UserVM> userList = new List<UserVM>();
 
-            var users = _userStore.GetUsers();
+            var users = _userService.GetUsers();
 
             foreach (var user in users)
             {
-                var userRoleId = _userRoleStore.GetUserRoles(user).FirstOrDefault().RoleId;
-                var roleName = _roleStore.GetRolesById(userRoleId).FirstOrDefault().Name;
+                var userRoleId =  _userService.GetUserRoles(user).FirstOrDefault().RoleId;
+                var roleName = _userService.GetRolesById(userRoleId).FirstOrDefault().Name;
 
                 userList.Add(new UserVM
                 {
@@ -45,11 +44,9 @@ namespace CodingExercise.Controllers
                     RoleName = roleName, 
                     Email = user.Email,
                     Phone = user.Phone,
-                    Username = user.Username
                 }); ;
             }
 
-            var pagedUserList = userList.ToPagedList(page ?? 1, 3);
             return View(userList.ToPagedList(page ?? 1, 3));
         }
 
@@ -62,10 +59,7 @@ namespace CodingExercise.Controllers
         // GET: User/Create
         public ActionResult Create()
         {
-            //UserData userData = new UserData();
-            //IEnumerable<UserRole> roleList = userData.GetUserRoles();
-
-            var roleList = _roleStore.GetRoles(); 
+            var roleList = _userService.GetRoles(); 
 
             var user = new UserVM();
             user.RoleNameList = roleList;
@@ -74,79 +68,167 @@ namespace CodingExercise.Controllers
         }
 
         //// POST: User/Create
-        //[HttpPost]
-        //public ActionResult Create(UserVM user)
-        //{
-        //    try
-        //    {
-        //        //repopulate the dropdownlist options
-        //        UserData userData = new UserData();
-        //        IEnumerable<UserRole> roleList = userData.GetUserRoles();
-        //        user.RoleNameList = roleList;
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(UserVM userVM)
+        {
+            try
+            {
+                //repopulate the dropdownlist options
+                var roleList = _userService.GetRoles();
+                userVM.RoleNameList = roleList;
 
-        //        //to check if the user is creating an admin
-        //        if (user.RoleId == 1 && string.IsNullOrEmpty(user.Phone))
-        //        {
-        //            ModelState.AddModelError("Phone", "Phone no is required for an admin user.");
-        //        }
+                if (!ModelState.IsValid)
+                {
+                    return View(userVM);
+                }
 
-        //        if (!ModelState.IsValid)
-        //        {
-        //            return View(user);
-        //        }
+                var user = new AppUser
+                {
+                    FirstName = userVM.FirstName,
+                    LastName = userVM.LastName,
+                    Email = userVM.Email,
+                    Phone = userVM.Phone
+                };
 
-        //        var retValue = userData.AddUser(user.Username, user.LastName, user.FirstName, user.RoleId, user.Email, user.Phone);
+                var userExists = _userService.GetUserByEmail(userVM.Email);
+                if (userExists != null)
+                {
+                    ModelState.AddModelError("", "Email already exists.");
+                    throw new Exception();
+                }
 
-        //        //insert failure
-        //        if (retValue < 1)
-        //        {
-        //            ModelState.AddModelError("", "Error: User creation failed.");
-        //            return View(user);
-        //        }
+                var successful = _userService.AddUser(user);
+                if (!successful)
+                {
+                    throw new Exception();
+                }
 
-        //        ViewBag.Message = @"The user has been created successfully.";
-        //        return View(user);
-        //        //return RedirectToAction("Index");
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
+                ViewBag.Message = @"The user has been created successfully.";
 
-        //public ActionResult ExportToPDF()
-        //{
-        //    UserData userData = new UserData();
-        //    var userDT = userData.PopulateUserDataTable();
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                ModelState.AddModelError("", "Error: User creation failed.");
+                return View(userVM);
+            }
+        }
 
-        //    string fileName = "List_of_Users_" + Guid.NewGuid().ToString() + ".pdf";
-        //    string filePath = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~"), "Temp", fileName);
+        public ActionResult UserListApiVersion()
+        {
+            return View();
+        }
 
-        //    Helpers.Helpers.ExportToPdf(userDT, filePath);
+        public ActionResult ExportToPDF()
+        {
+            List<UserVM> userList = new List<UserVM>();
 
-        //    byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+            var users = _userService.GetUsers();
 
-        //    return File(fileBytes, "System.Net.Mime.MediaTypeNames.Application.Octet", fileName);
+            foreach (var user in users)
+            {
+                var userRoleId = _userService.GetUserRoles(user).FirstOrDefault().RoleId;
+                var roleName = _userService.GetRolesById(userRoleId).FirstOrDefault().Name;
 
-        //    //return Content("Exported to " + filePath);
-        //}
+                userList.Add(new UserVM
+                {
+                    Id = user.Id,
+                    RoleId = 0,
+                    LastName = user.LastName,
+                    FirstName = user.FirstName,
+                    RoleName = roleName,
+                    Email = user.Email,
+                    Phone = user.Phone,
+                }); ;
+            }
 
-        //public ActionResult ExportToExcel()
-        //{
-        //    UserData userData = new UserData();
-        //    var userDT = userData.PopulateUserDataTable();
+            var dt = Export.PopulateDataTable(userList);
 
-        //    string fileName = "List_of_Users_" + Guid.NewGuid().ToString() + ".xlsx";
-        //    string filePath = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~"), "Temp", fileName);
+            string fileName = "List_of_Users_" + Guid.NewGuid().ToString() + ".pdf";
+            string filePath = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~"), "Temp", fileName);
 
-        //    DataSet ds = new DataSet();
-        //    ds.Tables.Add(userDT);
+            Export.ExportToPdf(dt, filePath);
 
-        //    Helpers.Helpers.ExportToExcel(ds, filePath);
+            byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
 
-        //    byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+            return File(fileBytes, "System.Net.Mime.MediaTypeNames.Application.Octet", fileName);
+        }
 
-        //    return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
-        //}
+        public ActionResult ExportToExcel()
+        {
+            List<UserVM> userList = new List<UserVM>();
+
+            var users = _userService.GetUsers();
+
+            foreach (var user in users)
+            {
+                var userRoleId = _userService.GetUserRoles(user).FirstOrDefault().RoleId;
+                var roleName = _userService.GetRolesById(userRoleId).FirstOrDefault().Name;
+
+                userList.Add(new UserVM
+                {
+                    Id = user.Id,
+                    RoleId = 0,
+                    LastName = user.LastName,
+                    FirstName = user.FirstName,
+                    RoleName = roleName,
+                    Email = user.Email,
+                    Phone = user.Phone,
+                }); ;
+            }
+
+            var dt = Export.PopulateDataTable(userList);
+
+            string fileName = "List_of_Users_" + Guid.NewGuid().ToString() + ".xlsx";
+            string filePath = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~"), "Temp", fileName);
+
+            System.Data.DataSet ds = new System.Data.DataSet();
+            ds.Tables.Add(dt);
+
+            Export.ExportToExcel(ds, filePath);
+
+            byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+
+            return File(fileBytes, "System.Net.Mime.MediaTypeNames.Application.Octet", fileName);
+        }
+
+        public ActionResult Test()
+        {
+            List<UserVM> userList = new List<UserVM>();
+
+            var users = _userService.GetUsers();
+
+            foreach (var user in users)
+            {
+                var userRoleId = _userService.GetUserRoles(user).FirstOrDefault().RoleId;
+                var roleName = _userService.GetRolesById(userRoleId).FirstOrDefault().Name;
+
+                userList.Add(new UserVM
+                {
+                    Id = user.Id,
+                    RoleId = 0,
+                    LastName = user.LastName,
+                    FirstName = user.FirstName,
+                    RoleName = roleName,
+                    Email = user.Email,
+                    Phone = user.Phone,
+                }); ;
+            }
+
+            var dt = Export.PopulateDataTable(userList);
+
+            string fileName = "List_of_Users_" + Guid.NewGuid().ToString() + ".xlsx";
+            string filePath = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~"), "Temp", fileName);
+
+            System.Data.DataSet ds = new System.Data.DataSet();
+            ds.Tables.Add(dt);
+
+            Export.ExportToExcel(ds, filePath);
+
+            byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+
+            return File(fileBytes, "System.Net.Mime.MediaTypeNames.Application.Octet", fileName);
+        }
     }
 }

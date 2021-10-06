@@ -7,16 +7,18 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>List of Users</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    <button>@Html.ActionLink("Create New", "Create")</button>
+
+    <button class="pull-right">@Html.ActionLink("Export to PDF", "ExportToPDF")</button>
+
+    <button class="pull-right" style="margin-right: 1em;">@Html.ActionLink("Export to Excel", "ExportToExcel")</button>
 </p>
+
 <table class="table">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.First().Username)
-        </th>
         <th>
             @Html.DisplayNameFor(model => model.First().LastName)
         </th>
@@ -38,9 +40,6 @@
     @foreach (var item in Model)
     {
 <tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.Username)
-    </td>
     <td>
         @Html.DisplayFor(modelItem => item.LastName)
     </td>

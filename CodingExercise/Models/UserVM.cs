@@ -1,18 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using CodingExercise.CustomAttributes;
 using CodingExercise.Entities;
 
 namespace CodingExercise.Models
 {
     public class UserVM
     {
+        [ExcludeFromExport]
         public int Id { get; set; }
-
-        [Required]
-        [DisplayName("Username")]
-        [StringLength(50)]
-        public string Username { get; set; }
 
         [Required]
         [DisplayName("Last Name")]
@@ -32,6 +29,7 @@ namespace CodingExercise.Models
 
 
         //foreign key
+        [ExcludeFromExport]
         [Required]
         public int RoleId { get; set; }
 
@@ -39,6 +37,7 @@ namespace CodingExercise.Models
         public string RoleName { get; set; }
 
         //role dropdown list
+        [ExcludeFromExport]
         [DisplayName("Role")]
         public IEnumerable<Role> RoleNameList { get; set; }
     }

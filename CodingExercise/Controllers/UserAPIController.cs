@@ -1,29 +1,23 @@
-﻿using System;
+﻿using CodingExercise.Models;
+using CodingExercise.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using CodingExercise.DAL;
-using CodingExercise.Models;
 
-namespace CodingExercise.Controllers
+namespace CodingExercise.APIControllers
 {
-    public class UserAPIController : ApiController
+    public class UserController : ApiController
     {
-        private readonly IUserStore _userStore;
-        private readonly IRoleStore _roleStore;
-        private readonly IUserRoleStore _userRoleStore;
+        private readonly IUserService _userService;
 
-        public UserAPIController()
+        public UserController()
         {
         }
 
-        public UserAPIController(IUserStore userStore, IRoleStore roleStore, IUserRoleStore userRoleStore)
+        public UserController(IUserService userService)
         {
-            _userStore = userStore;
-            _roleStore = roleStore;
-            _userRoleStore = userRoleStore;
+            _userService = userService;
         }
 
         // GET api/<controller>
@@ -31,38 +25,64 @@ namespace CodingExercise.Controllers
         {
             List<UserVM> userList = new List<UserVM>();
 
-            var users = _userStore.GetUsers();
+            try
+            { 
+                var users = _userService.GetUsers();
 
-            foreach (var user in users)
-            {
-                var userRoleId = _userRoleStore.GetUserRoles(user).FirstOrDefault().RoleId;
-                var roleName = _roleStore.GetRolesById(userRoleId).FirstOrDefault().Name;
-
-                userList.Add(new UserVM
+                foreach (var user in users)
                 {
-                    Id = user.Id,
-                    RoleId = 0,
-                    LastName = user.LastName,
-                    FirstName = user.FirstName,
-                    RoleName = roleName,
-                    Email = user.Email,
-                    Phone = user.Phone,
-                    Username = user.Username
-                }); ;
-            }
+                    var userRoleId = _userService.GetUserRoles(user).FirstOrDefault().RoleId;
+                    var roleName = _userService.GetRolesById(userRoleId).FirstOrDefault().Name;
 
-            return Ok(userList);
+                    userList.Add(new UserVM
+                    {
+                        Id = user.Id,
+                        LastName = user.LastName,
+                        FirstName = user.FirstName,
+                        RoleName = roleName,
+                        Email = user.Email,
+                        Phone = user.Phone,
+                    }); ;
+                }
+
+                return Ok(userList);
+            }
+            catch
+            {
+                return Ok("Something went wrong.");
+            }
         }
 
         // GET api/<controller>/5
         public IHttpActionResult Get(int id)
         {
-            var user = _userStore.GetUserById(id);
+            try
+            { 
+                var user = _userService.GetUserById(id);
+                var userRoleId = 0;
 
-            if (user == null)
-                return NotFound();
+                if (user == null)
+                    throw new Exception();
 
-            return Ok(user);
+                userRoleId = _userService.GetUserRoles(user).FirstOrDefault().RoleId;
+                var roleName = _userService.GetRolesById(userRoleId).FirstOrDefault().Name;
+
+                UserVM userVM = new UserVM
+                {
+                    Id = user.Id,
+                    LastName = user.LastName,
+                    FirstName = user.FirstName,
+                    RoleName = roleName,
+                    Email = user.Email,
+                    Phone = user.Phone
+                };
+
+                return Ok(user);
+            }
+            catch
+            {
+                return Ok("Something went wrong.");
+            }
         }
     }
 }
