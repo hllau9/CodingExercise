@@ -93,7 +93,6 @@ namespace CodingExercise.Helpers
         } //ExportExcel
 
         public static DataTable PopulateDataTable<T>(IEnumerable<T> data) where T : class
-        //public static List<string> PopulateDataTable<T>() where T : class
         {
             Type objType = typeof(T);
             PropertyInfo[] propertyInfos = objType.GetProperties();
