@@ -1,14 +1,18 @@
 ﻿<div class="jumbotron">
-    <h1>Coding Exercise</h1>
+    <h2>Coding Exercise</h2>
+    <br />
     <ul style="font-size: larger">
-        <li>There are two database table for users and roles respectively and for which I have provided the creation and data scripts.</li>
-        <li>Both are the main and test projects are in the same VS solution.</li>
-        <li>I take the liberty of using Autofac to facilitate dependency injection.</li>
-        <li>I include a code snippet in the zip to demonstrate how the API can be consumed by a console app.</li>
+        <li>Autofac is used to facilitate dependency injection.</li>
+        <li>Dapper is used for database access.</li>
     </ul>
     <br />
-    <p><a href="~/User" class="btn btn-primary btn-lg">Click to view the list of users</a></p>
-    <p><a href="~/api/UserAPI" class="btn btn-primary btn-lg">API - Return all users</a></p>
-    <p><a href="~/api/UserAPI?id=36" class="btn btn-primary btn-lg">API - Retrieve one user</a></p>
+    <p style="margin-bottom: 0;"><a href="~/User" class="btn btn-primary btn-lg">View list of users</a></p>
+    <span style="margin-top: 0;">The export functions on this page are different from the datatable export used in the page below.</span>
+    <p></p>
+    <p style="margin-bottom: 0;"><a href="~/User/UserListApiVersion" class="btn btn-primary btn-lg">View list of users (API)</a></p>
+    <span style="margin-top: 0;">This page contains a jQuery datatable which makes an API call to retrieve users.</span>
+    <p></p>
+    <p><a href="~/User/Create" class="btn btn-primary btn-lg">Create User</a></p>
+    
 </div>
 

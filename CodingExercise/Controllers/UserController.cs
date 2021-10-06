@@ -192,43 +192,5 @@ namespace CodingExercise.Controllers
 
             return File(fileBytes, "System.Net.Mime.MediaTypeNames.Application.Octet", fileName);
         }
-
-        public ActionResult Test()
-        {
-            List<UserVM> userList = new List<UserVM>();
-
-            var users = _userService.GetUsers();
-
-            foreach (var user in users)
-            {
-                var userRoleId = _userService.GetUserRoles(user).FirstOrDefault().RoleId;
-                var roleName = _userService.GetRolesById(userRoleId).FirstOrDefault().Name;
-
-                userList.Add(new UserVM
-                {
-                    Id = user.Id,
-                    RoleId = 0,
-                    LastName = user.LastName,
-                    FirstName = user.FirstName,
-                    RoleName = roleName,
-                    Email = user.Email,
-                    Phone = user.Phone,
-                }); ;
-            }
-
-            var dt = Export.PopulateDataTable(userList);
-
-            string fileName = "List_of_Users_" + Guid.NewGuid().ToString() + ".xlsx";
-            string filePath = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~"), "Temp", fileName);
-
-            System.Data.DataSet ds = new System.Data.DataSet();
-            ds.Tables.Add(dt);
-
-            Export.ExportToExcel(ds, filePath);
-
-            byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
-
-            return File(fileBytes, "System.Net.Mime.MediaTypeNames.Application.Octet", fileName);
-        }
     }
 }

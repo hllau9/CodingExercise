@@ -219,7 +219,6 @@
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\User\Create.cshtml" />
-    <Content Include="Views\User\Test.cshtml" />
     <Content Include="Views\User\UserListApiVersion.cshtml" />
   </ItemGroup>
   <ItemGroup />
