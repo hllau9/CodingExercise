@@ -6,3 +6,6 @@ The coding exercise for one of the job applications.
 3. AutoFac has to be wired up manually for this project as ASP MVC 5 doesn't ship with a default IoC container.
 4. Basic OWIN authentication and claim-based authorization is implemented.
 
+Future enhancements:
+1. Configure NLog to log errors to a database.
+

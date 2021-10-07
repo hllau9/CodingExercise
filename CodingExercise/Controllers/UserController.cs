@@ -15,9 +15,6 @@ namespace CodingExercise.Controllers
     {
         private readonly IUserService _userService;
 
-        public UserController()
-        {
-        }
         public UserController(IUserService userService)
         {
             _userService = userService;
@@ -48,12 +45,6 @@ namespace CodingExercise.Controllers
             }
 
             return View(userList.ToPagedList(page ?? 1, 3));
-        }
-
-        // GET: User/Details/5
-        public ActionResult Details(int id)
-        {
-            return Content(id.ToString());
         }
 
         // GET: User/Create

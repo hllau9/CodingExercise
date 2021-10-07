@@ -2,41 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
 
 namespace CodingExercise.CustomAttributes
 {
     public class ExcludeFromExportAttribute : Attribute
     {
     }
-
-    //public class MyAuthorizationAttribute : AuthorizeAttribute
-    //{
-    //    private string _myKeys;
-    //    public string MyKeys
-    //    {
-    //        get { return _myKeys; }
-    //        set
-    //        {
-    //            Roles = value;
-    //        }
-    //    }
-
-    //    protected override bool AuthorizeCore(System.Web.HttpContextBase httpContext)
-    //    {
-    //        base.AuthorizeCore(httpContext);
-    //    }
-
-    //    public override void OnAuthorization(AuthorizationContext filterContext)
-    //    {
-    //        base.OnAuthorization(filterContext);
-    //        if (filterContext.Result != null)
-    //        {
-    //            if (filterContext.Result.GetType() == typeof(HttpUnauthorizedResult))
-    //            {
-    //                //Do the logic for the unathorized requests
-    //            }
-    //        }
-    //    }
-    //}
 }
