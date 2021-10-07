@@ -27,6 +27,9 @@ namespace CodingExercise.Models
 
         public string Phone { get; set; }
 
+        [ExcludeFromExport]
+        public string PasswordHash { get; set; }
+
 
         //foreign key
         [ExcludeFromExport]

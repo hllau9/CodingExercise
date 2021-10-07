@@ -1,4 +1,6 @@
-﻿using CodingExercise.DAL;
+﻿using CodingExercise.CustomAttributes;
+using CodingExercise.DAL;
+using System.Security.Claims;
 using System.Web.Mvc;
 
 namespace CodingExercise.Controllers
@@ -10,16 +12,10 @@ namespace CodingExercise.Controllers
             return View();
         }
 
-        public ActionResult About()
+        [ClaimsAuthorize(ClaimTypes.Name, "superuser@superuser.com")]
+        public ActionResult Restricted()
         {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "This is a restricted page accessible only by superuser@superuser.com.";
 
             return View();
         }

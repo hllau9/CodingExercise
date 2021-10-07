@@ -12,12 +12,12 @@ namespace CodingExercise.DAL
 {
     public class UserManager : IUserManager
     {
-        private string connString = ConfigurationManager.ConnectionStrings["connString"].ConnectionString;
+        private readonly string connString = ConfigurationManager.ConnectionStrings["connString"].ConnectionString;
 
         public bool AddUser(AppUser appUser)
         {
-            string sqlUserTable = @"insert into Users (firstname, lastname, email, phone)
-                                    values (@firstname, @lastname, @email, @phone);
+            string sqlUserTable = @"insert into Users (firstname, lastname, email, phone, passwordhash)
+                                    values (@firstname, @lastname, @email, @phone, @passwordhash);
                                     select scope_identity();
                             ";
 
@@ -37,14 +37,16 @@ namespace CodingExercise.DAL
                     var roleId = conn.Query<int>(sqlRoleTable, new { RoleName = "General User" }, transaction); // assign General User role to all new users by default
                     var affectedRow = conn.Execute(sqlUserRoleTable, new { UserId = insertedRowId, RoleId = roleId }, transaction);
                     transaction.Commit();
+
+                    return true;
                 }
                 catch (Exception ex)
                 {
+                    //log exception
                     transaction.Rollback();
                     return false;
                 }
             }
-            return true;
         }
 
         public IEnumerable<AppUser> GetUsers()

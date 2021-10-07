@@ -38,6 +38,7 @@ namespace CodingExercise
 
             builder.RegisterType<UserManager>().As<IUserManager>();
             builder.RegisterType<UserService>().As<IUserService>();
+            builder.RegisterType<PasswordService>().As<IPasswordService>();
 
 
             // Set the dependency resolver to be Autofac.
