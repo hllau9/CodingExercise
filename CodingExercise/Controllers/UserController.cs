@@ -47,7 +47,7 @@ namespace CodingExercise.Controllers
             return View(userList.ToPagedList(page ?? 1, 3));
         }
 
-        // GET: User/Create
+        /*
         public ActionResult Create()
         {
             var roleList = _userService.GetRoles(); 
@@ -58,7 +58,6 @@ namespace CodingExercise.Controllers
             return View(user);
         }
 
-        //// POST: User/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(UserVM userVM)
@@ -105,6 +104,7 @@ namespace CodingExercise.Controllers
                 return View(userVM);
             }
         }
+        */
 
         public ActionResult UserListApiVersion()
         {

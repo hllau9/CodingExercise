@@ -2,6 +2,8 @@
 using Owin;
 using System;
 using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.Google;
+using Microsoft.AspNet.Identity;
 
 [assembly: OwinStartup(typeof(CodingExercise.Startup))]
 
@@ -15,10 +17,18 @@ namespace CodingExercise
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
-                AuthenticationType = "ApplicationCookie",
+                AuthenticationType = "MyApplicationCookie",
                 LoginPath = new PathString("/Account/Login"),
                 ExpireTimeSpan = TimeSpan.FromMinutes(10), //cookie expires after 10m of inactivity
                 SlidingExpiration = true
+            });
+
+            app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
+
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "your client id",
+                ClientSecret = "your client secret"
             });
         }
     }

@@ -32,18 +32,36 @@
                         <li>@Html.ActionLink("Login", "Login", "Account")</li>
                         <li>@Html.ActionLink("Register", "Register", "Account")</li>
                     }
-                    </ul>
+                </ul>
                 @if (@HttpContext.Current.GetOwinContext().Authentication.User.Identity.IsAuthenticated)
                 {
+                    var externalIssuer = @HttpContext.Current.GetOwinContext().Authentication.User.Claims.Where(c => c.Type == "Issuer").Select(c => c.Value).FirstOrDefault();
+                    var prefix = "You signed in with your " + externalIssuer + " account";
+
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a>@HttpContext.Current.GetOwinContext().Authentication.User.Identity.Name</a></li>
+                        <li><a>@if (!string.IsNullOrEmpty(externalIssuer)) { <b>@prefix</b> } @HttpContext.Current.GetOwinContext().Authentication.User.Identity.Name</a></li>
                         <li>@Html.ActionLink("Logout", "Logout", "Account")</li>
                     </ul>
                 }
+
+
+
+
+
             </div>
         </div>
     </div>
     <div class="container body-content">
+        @*@foreach (var item in @HttpContext.Current.GetOwinContext().Authentication.User.Claims)
+        {
+            <span>xxx @HttpContext.Current.GetOwinContext().Authentication.User.Claims.Where(c => c.Type == "Issuer").Select(c => c.Value).FirstOrDefault()</span>
+            <br/>
+            <span style="color: darkred;">@item.Issuer</span><br />
+            <span style="color: darkred;">@item.OriginalIssuer</span><br />
+            <span style="color: darkred;">@item.Type</span><br />
+            <span style="color: darkred;">@item.Value</span><br />
+        }*@
+
         @RenderBody()
         <hr />
         <footer>

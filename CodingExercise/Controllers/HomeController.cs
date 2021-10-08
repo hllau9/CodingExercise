@@ -12,10 +12,10 @@ namespace CodingExercise.Controllers
             return View();
         }
 
-        [ClaimsAuthorize(ClaimTypes.Name, "superuser@superuser.com")]
+        [ClaimsAuthorize(ClaimTypes.Name, "super@super.com")]
         public ActionResult Restricted()
         {
-            ViewBag.Message = "This is a restricted page accessible only by superuser@superuser.com.";
+            ViewBag.Message = "This is a restricted page accessible only by super@super.com.";
 
             return View();
         }
