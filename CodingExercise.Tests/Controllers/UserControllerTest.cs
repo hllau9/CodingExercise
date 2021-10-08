@@ -20,18 +20,18 @@ namespace CodingExercise.Tests.Controllers
             _userService = new UserServiceMock(_userManager);
         }
 
-        [TestMethod]
-        public void Create()
-        {
-            // Arrange
-            UserController controller = new UserController(_userService);
+        //[TestMethod]
+        //public void Create()
+        //{
+        //    // Arrange
+        //    UserController controller = new UserController(_userService);
 
-            // Act
-            ViewResult result = controller.Create() as ViewResult;
+        //    // Act
+        //    ViewResult result = controller.Create() as ViewResult;
 
-            // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(typeof(UserVM), result.Model.GetType());
-        }
+        //    // Assert
+        //    Assert.IsNotNull(result);
+        //    Assert.AreEqual(typeof(UserVM), result.Model.GetType());
+        //}
     }
 }
