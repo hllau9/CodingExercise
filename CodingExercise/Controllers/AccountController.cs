@@ -106,6 +106,7 @@ namespace CodingExercise.Controllers
                 return View(registerVM);
             }
 
+            TempData["SuccessMsg"] = "The registration was successful. Please log in.";
             return RedirectToAction("Login");
         }
 

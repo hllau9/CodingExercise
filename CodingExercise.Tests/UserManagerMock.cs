@@ -12,7 +12,7 @@ namespace CodingExercise.Tests
     {
         public bool AddUser(AppUser appUser)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         public IEnumerable<Role> GetRoles()
