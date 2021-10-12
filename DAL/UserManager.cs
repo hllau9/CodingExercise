@@ -12,6 +12,7 @@ namespace CodingExercise.DAL
 {
     public class UserManager : IUserManager
     {
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private readonly string connString = ConfigurationManager.ConnectionStrings["connString"].ConnectionString;
 
         public bool AddUser(AppUser appUser)
@@ -42,9 +43,13 @@ namespace CodingExercise.DAL
                 }
                 catch (Exception ex)
                 {
-                    //log exception
+                    Logger.Error(ex);
                     transaction.Rollback();
                     return false;
+                }
+                finally
+                {
+                    conn.Close();
                 }
             }
         }

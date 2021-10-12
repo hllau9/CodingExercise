@@ -13,6 +13,7 @@ namespace CodingExercise.Controllers
 {
     public class UserController : Controller
     {
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private readonly IUserService _userService;
 
         public UserController(IUserService userService)
@@ -25,23 +26,30 @@ namespace CodingExercise.Controllers
         {
             List<UserVM> userList = new List<UserVM>();
 
-            var users = _userService.GetUsers();
-
-            foreach (var user in users)
+            try
             {
-                var userRoleId =  _userService.GetUserRoles(user).FirstOrDefault().RoleId;
-                var roleName = _userService.GetRolesById(userRoleId).FirstOrDefault().Name;
+                var users = _userService.GetUsers();
 
-                userList.Add(new UserVM
+                foreach (var user in users)
                 {
-                    Id = user.Id,
-                    RoleId = 0,
-                    LastName = user.LastName,
-                    FirstName = user.FirstName,
-                    RoleName = roleName, 
-                    Email = user.Email,
-                    Phone = user.Phone,
-                }); ;
+                    var userRoleId = _userService.GetUserRoles(user).FirstOrDefault().RoleId;
+                    var roleName = _userService.GetRolesById(userRoleId).FirstOrDefault().Name;
+
+                    userList.Add(new UserVM
+                    {
+                        Id = user.Id,
+                        RoleId = 0,
+                        LastName = user.LastName,
+                        FirstName = user.FirstName,
+                        RoleName = roleName,
+                        Email = user.Email,
+                        Phone = user.Phone,
+                    }); ;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
             }
 
             return View(userList.ToPagedList(page ?? 1, 3));

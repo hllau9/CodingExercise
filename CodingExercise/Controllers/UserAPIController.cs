@@ -9,6 +9,7 @@ namespace CodingExercise.APIControllers
 {
     public class UserController : ApiController
     {
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private readonly IUserService _userService;
 
         public UserController()
@@ -44,25 +45,25 @@ namespace CodingExercise.APIControllers
                         Phone = user.Phone,
                     }); ;
                 }
-
-                return Ok(userList);
             }
-            catch
+            catch (Exception ex)
             {
-                return Ok("Something went wrong.");
+                Logger.Error(ex);
             }
+            
+            return Ok(userList);
         }
 
         // GET api/<controller>/5
         public IHttpActionResult Get(int id)
         {
             try
-            { 
+            {
                 var user = _userService.GetUserById(id);
                 var userRoleId = 0;
 
                 if (user == null)
-                    throw new Exception();
+                    return Ok("User not found.");
 
                 userRoleId = _userService.GetUserRoles(user).FirstOrDefault().RoleId;
                 var roleName = _userService.GetRolesById(userRoleId).FirstOrDefault().Name;
@@ -79,8 +80,9 @@ namespace CodingExercise.APIControllers
 
                 return Ok(user);
             }
-            catch
+            catch (Exception ex)
             {
+                Logger.Error(ex);
                 return Ok("Something went wrong.");
             }
         }
