@@ -3,14 +3,9 @@ using CodingExercise.DAL;
 using CodingExercise.Models;
 using CodingExercise.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
-using System.Web.Mvc;
 
 namespace CodingExercise.Tests.Controllers
 {
@@ -28,7 +23,7 @@ namespace CodingExercise.Tests.Controllers
         }
 
         [TestMethod]
-        public void Create()
+        public void GetUsersTest()
         {
             // Arrange
             UserController controller = new UserController(_userService);
@@ -38,7 +33,7 @@ namespace CodingExercise.Tests.Controllers
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(typeof(OkNegotiatedContentResult<string>), result.GetType());
+            Assert.AreEqual(typeof(OkNegotiatedContentResult<List<UserVM>>), result.GetType());
         }
     }
 }

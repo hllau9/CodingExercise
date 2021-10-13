@@ -42,7 +42,17 @@ namespace CodingExercise.Tests
 
         public IEnumerable<AppUser> GetUsers()
         {
-            throw new NotImplementedException();
+            //List<AppUser> appUsers = new List<AppUser>();
+
+            //appUsers.Add(new AppUser { Id = 1, Email = "email@email.com", FirstName = "first", LastName = "last", PasswordHash = "pwdhash", Phone = "12345" });
+            //appUsers.Add(new AppUser { Id = 1, Email = "email@email.com", FirstName = "first", LastName = "last", PasswordHash = "pwdhash", Phone = "12345" });
+            //appUsers.Add(new AppUser { Id = 1, Email = "email@email.com", FirstName = "first", LastName = "last", PasswordHash = "pwdhash", Phone = "12345" });
+            //appUsers.Add(new AppUser { Id = 1, Email = "email@email.com", FirstName = "first", LastName = "last", PasswordHash = "pwdhash", Phone = "12345" });
+            //appUsers.Add(new AppUser { Id = 1, Email = "email@email.com", FirstName = "first", LastName = "last", PasswordHash = "pwdhash", Phone = "12345" });
+
+            //return appUsers;
+
+            throw new Exception();
         }
     }
 }

@@ -54,11 +54,7 @@ namespace CodingExercise.Tests
 
         public IEnumerable<AppUser> GetUsers()
         {
-            List<AppUser> users = new List<AppUser>();
-            users.Add(new AppUser { Id = 1, Email = "some@email.com", FirstName = "Oscar", LastName = "Wilde", Phone = "55555" });
-            users.Add(new AppUser { Id = 2, Email = "cdickens@email.com", FirstName = "Charles", LastName = "Dickens", Phone = "77777" });
-
-            return users;
+            return _userManager.GetUsers();
         }
     }
 }

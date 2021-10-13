@@ -24,6 +24,9 @@ namespace CodingExercise.Controllers
         // GET: User
         public ActionResult Index(int? page)
         {
+            if (page < 1)
+                page = 1;
+
             List<UserVM> userList = new List<UserVM>();
 
             try
